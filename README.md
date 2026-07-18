@@ -1,4 +1,4 @@
-# Coffee Notes
+# Café con Kai
 
 A minimal, static blog theme (plain HTML/CSS, no build tools, no server)
 styled after 4gravitons.com — single centered column, quiet type, no sidebar
