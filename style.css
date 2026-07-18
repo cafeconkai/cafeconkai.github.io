@@ -1,0 +1,258 @@
+/* ---------------------------------------------------
+   Coffee Notes — base stylesheet
+   A clean, minimal blog theme in the spirit of
+   4gravitons.com: single centered column, generous
+   whitespace, restrained type, no sidebar clutter.
+--------------------------------------------------- */
+
+:root {
+  --page-bg: #ececec;
+  --content-bg: #ffffff;
+  --text: #2b2b2b;
+  --muted: #767676;
+  --link: #a0522d;      /* coffee-ish brown accent */
+  --link-hover: #6f3a1d;
+  --border: #e2e2e2;
+  --max-width: 700px;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  background: var(--content-bg);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ---------- Header ---------- */
+
+header.site-header {
+  padding: 48px 24px 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 2.4em;
+  font-weight: normal;
+  letter-spacing: -0.01em;
+}
+.site-title a { color: var(--text); }
+.site-title a:hover { text-decoration: none; color: var(--link); }
+
+.site-tagline {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.95em;
+  font-style: italic;
+}
+
+nav.site-nav {
+  margin-top: 20px;
+}
+nav.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+nav.site-nav a {
+  color: var(--text);
+  font-size: 0.88em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+nav.site-nav a:hover { color: var(--link); }
+
+/* ---------- Main content ---------- */
+
+main {
+  padding: 40px 24px 20px;
+}
+
+article.post {
+  margin-bottom: 56px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+}
+article.post:last-child {
+  border-bottom: none;
+}
+
+.post-title {
+  font-family: var(--serif);
+  font-size: 1.7em;
+  font-weight: normal;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+.post-title a { color: var(--text); }
+.post-title a:hover { color: var(--link); }
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.85em;
+  margin-bottom: 20px;
+}
+.post-meta a { color: var(--muted); }
+.post-meta a:hover { color: var(--link); }
+
+.post-body p {
+  margin: 0 0 1.2em;
+  line-height: 1.7;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.4em 0;
+}
+
+/* Single photo with a caption:
+   <figure>
+     <img src="images/latte.jpg" alt="...">
+     <figcaption>Oat milk latte, $5.50</figcaption>
+   </figure>
+*/
+.post-body figure {
+  margin: 1.4em 0;
+}
+.post-body figure img {
+  margin: 0 0 8px;
+}
+.post-body figcaption {
+  font-size: 0.85em;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Multiple photos side by side — wrap 2-3 <img> or <figure> tags in this:
+   <div class="photo-grid">
+     <img src="images/latte.jpg" alt="...">
+     <img src="images/interior.jpg" alt="...">
+   </div>
+   Wraps to a single column automatically on narrow screens. */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 1.4em 0;
+}
+.photo-grid img,
+.photo-grid figure {
+  margin: 0;
+}
+.photo-grid img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.photo-grid figcaption {
+  margin-top: 6px;
+}
+
+.post-body blockquote {
+  margin: 1.4em 0;
+  padding-left: 18px;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+  font-style: italic;
+}
+
+.post-tags {
+  margin-top: 24px;
+  font-size: 0.82em;
+  color: var(--muted);
+}
+.post-tags a {
+  margin-right: 10px;
+}
+
+.rating {
+  display: inline-block;
+  margin: 4px 0 20px;
+  font-size: 0.95em;
+  color: var(--muted);
+}
+
+/* Home page excerpt list */
+.post-excerpt {
+  color: var(--text);
+}
+.read-more {
+  font-size: 0.88em;
+}
+
+/* ---------- Single post nav ---------- */
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+  font-size: 0.9em;
+}
+
+/* ---------- Footer ---------- */
+
+footer.site-footer {
+  padding: 32px 24px 48px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.about-blurb {
+  max-width: 480px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.footer-links a {
+  margin: 0 8px;
+  color: var(--muted);
+}
+.footer-links a:hover { color: var(--link); }
+
+.tag-cloud {
+  margin-top: 20px;
+  line-height: 2;
+}
+.tag-cloud a {
+  color: var(--muted);
+  margin: 0 6px;
+}
+.tag-cloud a:hover { color: var(--link); }
+
+@media (max-width: 640px) {
+  .site-title { font-size: 1.9em; }
+  main { padding: 28px 18px 10px; }
+  header.site-header { padding: 36px 18px 20px; }
+}
