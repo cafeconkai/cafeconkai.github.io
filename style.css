@@ -190,6 +190,11 @@ article.post:last-child {
   margin-top: 6px;
 }
 
+/* Espresso Log entry titles (used on log.html) — scoped to .log-entry so
+   this doesn't touch .post-title on regular blog posts anywhere else. */
+.log-entry .post-title {
+  font-size: 1.15em;
+}
 /* Espresso Log stat pills (used on log.html) */
 .log-stats {
   list-style: none;
