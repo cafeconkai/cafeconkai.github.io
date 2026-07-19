@@ -5,9 +5,9 @@ A minimal, static blog theme (plain HTML/CSS, no build tools, no server) — sin
 ## Files
 
 - `index.html` — homepage, lists all posts newest-first (all categories mixed)
-- `basel.html` — the flagship project: every café review in Basel, newest first
+- `basel.html` — main project: every café review in Basel, newest first
 - `elsewhere.html` — café reviews from other cities, newest first
-- `notes.html` — everything that isn't a review (brewing tips, explainers, musings), newest first
+- `notes.html` — everything that isn't a review, newest first
 - `archive.html` — every post, one line each, links to all three category pages
 - `about.html` — the "Who am I?" page
 - `style.css` — all the styling, in one file
@@ -83,11 +83,10 @@ footer is in `index.html`.
 
 ## Hosting it
 
-Any static host works. Two free, no-fuss options:
+Any static host works.
 
 - **GitHub Pages**: create a repo, push these files, turn on Pages in repo
   settings pointing at the root of the `main` branch.
-- **Netlify**: drag the whole folder onto netlify.com/drop.
 
 You can also just open `index.html` directly in a browser to preview it
 locally before publishing anything.
