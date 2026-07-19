@@ -105,6 +105,17 @@ article.post:last-child {
   border-bottom: none;
 }
 
+/* Homepage cap: only show the 10 most recent excerpts (see index.html's
+   #home-feed <main>). Older excerpt blocks stay in the file, just hidden
+   here — nothing is deleted, and archive.html / basel.html / elsewhere.html
+   / notes.html always show every post regardless of this rule. */
+#home-feed .post:nth-of-type(n + 11) {
+  display: none;
+}
+#home-feed .post:nth-of-type(10) {
+  border-bottom: none;
+}
+
 .post-title {
   font-family: var(--serif);
   font-size: 1.7em;
