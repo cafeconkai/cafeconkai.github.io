@@ -16,6 +16,9 @@
     <nav class="site-nav">
       <ul>
         <li><a href="index.html">Home</a></li>
+        <li><a href="basel.html">Basel</a></li>
+        <li><a href="elsewhere.html">Elsewhere</a></li>
+        <li><a href="notes.html">Notes</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="archive.html">Archive</a></li>
       </ul>
@@ -26,22 +29,38 @@
 
     <!--
       HOW TO ADD A NEW POST:
-      1. Copy posts/template.html to posts/your-post-slug.html and fill it in.
+      1. Café review (Basel or elsewhere) -> copy posts/template.html
+         General coffee post -> copy posts/template-note.html
+         Save as posts/your-post-slug.html and fill it in.
       2. Copy one <article class="post"> block below, update the title link,
          date, category/tags, and excerpt text.
-      3. Add the same entry to archive.html.
+      3. Add the same entry to archive.html, and to basel.html,
+         elsewhere.html, or notes.html depending on which type it is.
       See README.md for the full walkthrough.
     -->
 
+    <!-- Example: a Basel café review -->
     <article class="post">
-      <h2 class="post-title"><a href="posts/template.html">[Example] Post title goes here</a></h2>
-      <p class="post-meta">Posted on <time datetime="2026-07-15">July 15, 2026</time> in <a href="archive.html">Category</a></p>
+      <h2 class="post-title"><a href="posts/template.html">[Example] A café review title goes here</a></h2>
+      <p class="post-meta">Posted on <time datetime="2026-07-15">July 15, 2026</time> in <a href="basel.html">Basel</a></p>
       <div class="post-excerpt">
         <p>This is a placeholder excerpt. Replace this whole &lt;article&gt; block with your
-        first real post — a couple of sentences about the shop, then a
+        first real review — a couple of sentences about the shop, then a
         “Continue reading” link to the full post page.</p>
       </div>
       <p class="read-more"><a href="posts/template.html">Continue reading &rarr;</a></p>
+    </article>
+
+    <!-- Example: a general coffee post -->
+    <article class="post">
+      <h2 class="post-title"><a href="posts/template-note.html">[Example] A general coffee post title goes here</a></h2>
+      <p class="post-meta">Posted on <time datetime="2026-07-10">July 10, 2026</time> in <a href="notes.html">Coffee Notes</a></p>
+      <div class="post-excerpt">
+        <p>This is a placeholder excerpt for a non-review post, like brewing
+        tips or an explainer on specialty coffee. Trim to a couple of
+        sentences, then link to the full post.</p>
+      </div>
+      <p class="read-more"><a href="posts/template-note.html">Continue reading &rarr;</a></p>
     </article>
 
   </main>
@@ -52,6 +71,9 @@
       edit this in index.html and about.html.
     </p>
     <p class="footer-links">
+      <a href="basel.html">Basel</a> ·
+      <a href="elsewhere.html">Elsewhere</a> ·
+      <a href="notes.html">Notes</a> ·
       <a href="about.html">About</a> ·
       <a href="archive.html">Archive</a> ·
       <a href="mailto:you@example.com">Contact</a>

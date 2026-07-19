@@ -6,24 +6,54 @@ clutter.
 
 ## Files
 
-- `index.html` — homepage, lists posts newest-first
+- `index.html` — homepage, lists all posts newest-first (all categories mixed)
+- `basel.html` — the flagship project: every café review in Basel, newest first
+- `elsewhere.html` — café reviews from other cities, newest first
+- `notes.html` — everything that isn't a review (brewing tips, explainers, musings), newest first
+- `archive.html` — every post, one line each, links to all three category pages
 - `about.html` — the "Who am I?" page
-- `archive.html` — a plain chronological list of every post
 - `style.css` — all the styling, in one file
-- `posts/template.html` — copy this for every new post
+- `posts/template.html` — copy this for a **café review** (Basel or elsewhere)
+- `posts/template-note.html` — copy this for a **general coffee post**
+
+## Three categories
+
+Posts are split into three kinds:
+
+- **Basel** (`posts/template.html`, category line pointed at `basel.html`)
+  — the main project: every café you review in Basel. `basel.html` also
+  has a hand-updated count near the top ("X reviewed so far") — bump it
+  each time you add one.
+- **Elsewhere** (same `posts/template.html`, category line pointed at
+  `elsewhere.html` instead) — café reviews from other cities/trips.
+- **Coffee Notes** (`posts/template-note.html` → listed on `notes.html`) —
+  no rating line, meant for brewing guides, explainers, general musings.
+
+There's only one review template for both Basel and Elsewhere — inside it,
+the post-meta block has two category lines with one commented out; keep
+whichever city applies and delete/comment the other. All three categories
+show up together on `index.html` and `archive.html`; the nav bar (Basel /
+Elsewhere / Notes) lets visitors jump to just one kind.
 
 ## Adding a new post
 
-1. Duplicate `posts/template.html` and rename it, e.g. `posts/blue-bottle-hayes-valley.html`.
-2. Open it and fill in: the `<title>`, the post title, the date, category,
-   optional rating line, body paragraphs, and tags. Delete the parts you
-   don't want (like the rating line).
+1. Copy `posts/template.html` (any café review) or `posts/template-note.html`
+   (everything else), and rename it, e.g. `posts/kaffeehaus-mueller.html`.
+2. Open it and fill in: the `<title>`, the post title, the date, body
+   paragraphs, and tags. For reviews: fill in or delete the rating line,
+   and pick Basel or Elsewhere in the post-meta block (delete the other line).
 3. Add a matching entry to `archive.html` (one line, newest at the top).
-4. Add an excerpt block to `index.html` (copy the existing `<article
-   class="post">` block, point the links at your new file, trim the text to
-   a couple of sentences, keep the "Continue reading" link).
-5. If you want a photo, drop the image file in `posts/images/` and
+4. Add the same entry to `basel.html`, `elsewhere.html`, or `notes.html`,
+   whichever fits. If it's a Basel review, bump the count in `basel.html`.
+5. Add an excerpt block to `index.html` (copy one of the existing
+   `<article class="post">` blocks, point the links at your new file, trim
+   the text to a couple of sentences, keep the "Continue reading" link).
+6. If you want a photo, drop the image file in `posts/images/` and
    uncomment the `<img>` line in your post.
+
+Yes, that's four files to touch per post (post + archive + category page +
+homepage excerpt). There's no CMS here — it's plain files, so this is the
+tradeoff for not needing a build step or database.
 
 ## Adding photos
 
@@ -44,8 +74,11 @@ grid cell) — no manual resizing needed.
 
 Site title and tagline live in the `<header class="site-header">` block —
 it's repeated at the top of every page (`index.html`, `about.html`,
-`archive.html`, `posts/template.html`), so update it everywhere, or just do
-a find-and-replace for the placeholder text across all files.
+`archive.html`, `basel.html`, `elsewhere.html`, `notes.html`,
+`posts/template.html`, `posts/template-note.html`), so update it
+everywhere, or just do a find-and-replace for the placeholder text across
+all files (VS Code: Cmd/Ctrl+Shift+F, expand the replace field, "Replace
+All").
 
 The about blurb is in `about.html`; the short version in the homepage
 footer is in `index.html`.
