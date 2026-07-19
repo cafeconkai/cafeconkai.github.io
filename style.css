@@ -179,6 +179,23 @@ article.post:last-child {
   margin-top: 6px;
 }
 
+/* Espresso Log stat pills (used on log.html) */
+.log-stats {
+  list-style: none;
+  margin: 0 0 1em;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.82em;
+}
+.log-stats li {
+  background: #f2ece6;
+  color: var(--text);
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+
 .post-body blockquote {
   margin: 1.4em 0;
   padding-left: 18px;

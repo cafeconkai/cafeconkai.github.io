@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espresso Log | Café con Kai</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site-header">
+    <h1 class="site-title"><a href="index.html">Café con Kai</a></h1>
+    <p class="site-tagline">Home brewing, café hunting, and everything in between.</p>
+    <nav class="site-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="basel.html">Basel</a></li>
+        <li><a href="elsewhere.html">Elsewhere</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="archive.html">Archive</a></li>
+        <li><a href="log.html">Log</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="post">
+      <h2 class="post-title" style="font-size:1.3em;">Espresso Log</h2>
+      <div class="post-body">
+        <p>Every espresso I pull, logged from my phone: beans, temperature,
+        grind size, dose, and extraction time, plus a quick note on how it
+        tasted. Newest first.
+        <!-- Replace this with your actual Google Form link once it's set up -->
+        <a href="YOUR_GOOGLE_FORM_LINK_HERE">Add today's shot &rarr;</a></p>
+      </div>
+    </article>
+
+    <div id="log-entries">
+      <article class="post">
+        <p class="post-body">Loading entries&hellip;</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-links">
+      <a href="index.html">Home</a> ·
+      <a href="mailto:you@example.com">Contact</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Espresso Log — reads a public Google Sheet (linked to a Google
+   Form) and renders each row as a mini post. No backend needed.
+
+   SETUP (see README.md for the full walkthrough):
+   1. Create a Google Form with these questions, IN THIS ORDER:
+      Coffee Beans (Multiple choice, "Add other" enabled)
+      Temperature - C (Short answer, number)
+      Grind Size (Short answer, number)
+      Dose - g (Short answer, number)
+      Extraction Time - s (Short answer, number)
+      Flavor Notes (Paragraph)
+   2. Link the Form to a Google Sheet (Form's "Responses" tab -> Sheets icon).
+   3. In the Sheet: File > Share > General access > "Anyone with the link"
+      (Viewer). This does NOT require "Publish to web".
+   4. Copy the Sheet's ID from its URL:
+      https://docs.google.com/spreadsheets/d/THIS_PART_IS_THE_ID/edit
+   5. Paste it below as SHEET_ID. Leave SHEET_NAME as "Form Responses 1"
+      unless you renamed the sheet tab.
+------------------------------------------------------------------ */
+
+const SHEET_ID = "PASTE_YOUR_GOOGLE_SHEET_ID_HERE";
+const SHEET_NAME = "Form Responses 1";
+
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], next = text[i + 1];
+    if (inQuotes) {
+      if (c === '"' && next === '"') { field += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { field += c; }
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\r") { /* skip */ }
+      else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+      else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 && r.some(v => v !== ""));
+}
+
+function escapeHTML(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function formatDate(timestamp) {
+  const d = new Date(timestamp);
+  if (isNaN(d)) return escapeHTML(timestamp);
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function renderEntry(row) {
+  // Column order must match the Form question order above:
+  const [timestamp, beans, temp, grind, dose, time, notes] = row;
+  return `
+    <article class="post log-entry">
+      <h2 class="post-title">${escapeHTML(beans) || "Unlabeled beans"}</h2>
+      <p class="post-meta">${formatDate(timestamp)}</p>
+      <ul class="log-stats">
+        <li>${escapeHTML(temp)}&deg;C</li>
+        <li>Grind ${escapeHTML(grind)}</li>
+        <li>${escapeHTML(dose)}g</li>
+        <li>${escapeHTML(time)}s</li>
+      </ul>
+      ${notes ? `<div class="post-body"><p>${escapeHTML(notes)}</p></div>` : ""}
+    </article>`;
+}
+
+async function loadLog() {
+  const container = document.getElementById("log-entries");
+  if (SHEET_ID === "PASTE_YOUR_GOOGLE_SHEET_ID_HERE") {
+    container.innerHTML = `<article class="post"><p class="post-body">
+      This page isn't wired up yet — open log.html and paste your Google
+      Sheet ID into the SHEET_ID constant near the bottom of the file.
+      See README.md for the full setup steps.</p></article>`;
+    return;
+  }
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+    const rows = parseCSV(await res.text());
+    rows.shift(); // drop header row
+    if (!rows.length) {
+      container.innerHTML = `<article class="post"><p class="post-body">No entries yet.</p></article>`;
+      return;
+    }
+    rows.reverse(); // newest first
+    container.innerHTML = rows.map(renderEntry).join("");
+  } catch (err) {
+    container.innerHTML = `<article class="post"><p class="post-body">
+      Couldn't load the log right now. Make sure the Google Sheet is
+      shared as "Anyone with the link can view" and the SHEET_ID in
+      log.html is correct.</p></article>`;
+    console.error(err);
+  }
+}
+
+loadLog();
+</script>
+</body>
+</html>
