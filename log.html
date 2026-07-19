@@ -60,7 +60,7 @@
 
    SETUP (see README.md for the full walkthrough):
    1. Create a Google Form with these questions, IN THIS ORDER:
-      Coffee Beans (Multiple choice, "Add other" enabled)
+      Coffee Beans (Short answer)
       Temperature - C (Short answer, number)
       Grind Size (Short answer, number)
       Dose - g (Short answer, number)
@@ -70,15 +70,16 @@
    3. In the Sheet: File > Share > General access > "Anyone with the link"
       (Viewer). This does NOT require "Publish to web".
    4. Copy the Sheet's ID from its URL:
-      https://docs.google.com/spreadsheets/d/THIS_PART_IS_THE_ID/edit
-   5. Paste it below as SHEET_ID. Leave SHEET_NAME as "Form Responses 1"
-      unless you renamed the sheet tab.
+      https://docs.google.com/spreadsheets/d/THIS_PART_IS_THE_ID/edit#gid=0
+   5. Paste it below as SHEET_ID. Also grab the number after "gid=" in
+      that same URL and paste it as SHEET_GID (it's almost always 0 for
+      the first/only tab, which is already the default below).
 ------------------------------------------------------------------ */
 
-const SHEET_ID = "PASTE_YOUR_GOOGLE_SHEET_ID_HERE";
-const SHEET_NAME = "Form Responses 1";
+const SHEET_ID = "1NEi2fcRsISECTvpZ59UjygjEHDVmwokDIJK7NKpk2EA";
+const SHEET_GID = 0;
 
-const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
 
 function parseCSV(text) {
   const rows = [];
@@ -108,7 +109,17 @@ function escapeHTML(s) {
 }
 
 function formatDate(timestamp) {
-  const d = new Date(timestamp);
+  // Google Sheets timestamps from Forms are often "DD/MM/YYYY HH:MM:SS"
+  // (day first) — JS's Date constructor misreads that as month-first and
+  // silently fails, so parse that shape explicitly before falling back.
+  const dmy = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(timestamp);
+  let d;
+  if (dmy) {
+    const [, day, month, year] = dmy;
+    d = new Date(Number(year), Number(month) - 1, Number(day));
+  } else {
+    d = new Date(timestamp);
+  }
   if (isNaN(d)) return escapeHTML(timestamp);
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
@@ -132,7 +143,7 @@ function renderEntry(row) {
 
 async function loadLog() {
   const container = document.getElementById("log-entries");
-  if (SHEET_ID === "1NEi2fcRsISECTvpZ59UjygjEHDVmwokDIJK7NKpk2EA") {
+  if (SHEET_ID === "PASTE_YOUR_GOOGLE_SHEET_ID_HERE") {
     container.innerHTML = `<article class="post"><p class="post-body">
       This page isn't wired up yet — open log.html and paste your Google
       Sheet ID into the SHEET_ID constant near the bottom of the file.
@@ -153,8 +164,10 @@ async function loadLog() {
   } catch (err) {
     container.innerHTML = `<article class="post"><p class="post-body">
       Couldn't load the log right now. Make sure the Google Sheet is
-      shared as "Anyone with the link can view" and the SHEET_ID in
-      log.html is correct.</p></article>`;
+      shared as "Anyone with the link can view", and that SHEET_ID and
+      SHEET_GID in log.html are correct. Open the browser console (or
+      just visit the URL below directly) for the exact error.</p></article>`;
+    console.error("Espresso Log failed to load. CSV_URL was:", CSV_URL);
     console.error(err);
   }
 }
