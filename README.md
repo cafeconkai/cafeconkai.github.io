@@ -6,11 +6,17 @@ clutter.
 
 ## Files
 
-- `index.html` — homepage, lists all posts newest-first (all categories mixed)
-- `basel.html` — the flagship project: every café review in Basel, newest first
-- `elsewhere.html` — café reviews from other cities, newest first
-- `notes.html` — everything that isn't a review (brewing tips, explainers, musings), newest first
-- `archive.html` — every post, one line each, links to all three category pages
+- `index.html` — homepage, auto-built by `feed.js` from the 10 most
+  recent entries across all three category pages (see below)
+- `basel.html` — the flagship project: every café review in Basel, newest
+  first. **This is a file you actually edit** when you add a Basel post.
+- `elsewhere.html` — café reviews from other cities, newest first. **You
+  edit this** for a non-Basel review.
+- `notes.html` — everything that isn't a review (brewing tips, explainers,
+  musings), newest first. **You edit this** for a general post.
+- `archive.html` — every post, one line each, auto-built by `feed.js`
+- `feed.js` — the script that reads basel/elsewhere/notes.html and builds
+  the homepage and archive; you never need to edit this
 - `about.html` — the "Who am I?" page
 - `style.css` — all the styling, in one file
 - `posts/template.html` — copy this for a **café review** (Basel or elsewhere)
@@ -37,23 +43,40 @@ Elsewhere / Notes) lets visitors jump to just one kind.
 
 ## Adding a new post
 
+Only **two** files to touch — the post itself, and its category page.
+`index.html` and `archive.html` build themselves.
+
 1. Copy `posts/template.html` (any café review) or `posts/template-note.html`
    (everything else), and rename it, e.g. `posts/kaffeehaus-mueller.html`.
 2. Open it and fill in: the `<title>`, the post title, the date, body
    paragraphs, and tags. For reviews: fill in or delete the rating line,
    and pick Basel or Elsewhere in the post-meta block (delete the other line).
-3. Add a matching entry to `archive.html` (one line, newest at the top).
-4. Add the same entry to `basel.html`, `elsewhere.html`, or `notes.html`,
-   whichever fits. If it's a Basel review, bump the count in `basel.html`.
-5. Add an excerpt block to `index.html` (copy one of the existing
-   `<article class="post">` blocks, point the links at your new file, trim
-   the text to a couple of sentences, keep the "Continue reading" link).
-6. If you want a photo, drop the image file in `posts/images/` and
+3. Open `basel.html`, `elsewhere.html`, or `notes.html` — whichever fits —
+   and copy one `<article class="entry">` block to the **top** of the list
+   (newest first). Update `data-date`, the link + title, the date shown,
+   and write a 1-2 sentence excerpt. That's it.
+4. If you want a photo, drop the image file in `posts/images/` and
    uncomment the `<img>` line in your post.
 
-Yes, that's four files to touch per post (post + archive + category page +
-homepage excerpt). There's no CMS here — it's plain files, so this is the
-tradeoff for not needing a build step or database.
+The Basel "X reviewed so far" count updates itself. The homepage (10 most
+recent, mixed across all categories) and the archive page rebuild
+themselves every time someone loads them, by fetching `basel.html`,
+`elsewhere.html`, and `notes.html` and reading the `.entry` blocks — see
+`feed.js`. Keep pasting new entries at the top; everything is sorted by
+`data-date` anyway, so exact position doesn't matter, but newest-first
+keeps the source readable.
+
+**Heads up:** because the homepage and archive use `fetch()` to read the
+other pages, this only works when the site is served over `http://` or
+`https://` — GitHub Pages and Netlify both do this automatically. If you
+want to preview locally before pushing, don't just double-click
+`index.html`; instead run a tiny local server from this folder, e.g.
+`python3 -m http.server`, then open `http://localhost:8000/`. Opening the
+file directly (`file://...`) will leave the homepage stuck on "Loading
+posts…".
+
+To change the homepage cap, edit the `10` passed to `renderHomeFeed` in
+the `<script>` tag at the bottom of `index.html`.
 
 ## Adding photos
 
@@ -113,9 +136,10 @@ Google Sheet with a bit of JavaScript.
 
 1. Go to [forms.google.com](https://forms.google.com) and create a new
    form with these questions, **in this exact order**:
-   - **Coffee Beans** — Multiple choice, with "Add other" turned on (so
-     you can type a new bean on the fly; add it as a real option later
-     if you use it often).
+   - **Coffee Beans** — Short answer (plain text). A dropdown was
+     tempting, but Google Forms' "Add other" answers never get promoted
+     into the permanent choice list, so a dropdown would need manual
+     upkeep for no real benefit — plain text is one tap either way.
    - **Temperature (°C)** — Short answer. Under the ⋮ menu, turn on
      Response validation → Number, to keep it numeric.
    - **Grind Size** — Short answer, same number validation.
@@ -126,15 +150,16 @@ Google Sheet with a bit of JavaScript.
    create a linked Google Sheet.
 3. In that Sheet: **File → Share → General access → "Anyone with the
    link"**, set to Viewer. (You do *not* need "Publish to web".)
-4. Copy the Sheet's ID from its URL — the long string between
-   `/d/` and `/edit`:
-   `https://docs.google.com/spreadsheets/d/`**`THIS_PART`**`/edit`
-5. Open `log.html`, find the script near the bottom, and paste that ID
-   into `SHEET_ID`. Leave `SHEET_NAME` as `"Form Responses 1"` unless you
-   renamed the sheet tab.
-6. Open the Form itself, hit Send, copy its link, and paste it over
-   `YOUR_GOOGLE_FORM_LINK_HERE` near the top of `log.html` (the "Add
-   today's shot" link).
+4. Copy the Sheet's ID from its URL — the long string between `/d/` and
+   `/edit`, plus the number after `gid=` at the very end (usually `0`):
+   `https://docs.google.com/spreadsheets/d/`**`THIS_PART`**`/edit#gid=`**`0`**
+5. Open `log.html`, find the script near the bottom, and paste the ID
+   into `SHEET_ID` and the gid number into `SHEET_GID` (it defaults to
+   `0`, which is correct for the first/only sheet tab in almost every
+   case — no need to touch it unless your sheet has multiple tabs).
+6. Open the Form itself, hit Send, and copy its link. The link is kept
+   off the public site on purpose (so random visitors can't submit
+   entries) — just save it for yourself in step 7.
 7. On your phone, save the Form link to your home screen (Share → Add to
    Home Screen) so it opens like a mini app.
 
@@ -142,6 +167,5 @@ That's it — every submission shows up on `log.html` automatically,
 newest first. There's a short delay (Google's CSV export caches for a
 minute or two), so a brand-new entry might take a moment to appear.
 
-**Adding a new coffee bean:** pick "Other" in the Form and type it in.
-Once you've used a bean a few times, edit the Form and add it as a real
-option so it's a single tap next time.
+**Adding a new coffee bean:** just type it into the Coffee Beans field —
+no form editing needed, ever.

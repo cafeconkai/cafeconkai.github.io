@@ -105,16 +105,9 @@ article.post:last-child {
   border-bottom: none;
 }
 
-/* Homepage cap: only show the 10 most recent excerpts (see index.html's
-   #home-feed <main>). Older excerpt blocks stay in the file, just hidden
-   here — nothing is deleted, and archive.html / basel.html / elsewhere.html
-   / notes.html always show every post regardless of this rule. */
-#home-feed .post:nth-of-type(n + 11) {
-  display: none;
-}
-#home-feed .post:nth-of-type(10) {
-  border-bottom: none;
-}
+/* The homepage (10 most recent) and archive.html no longer hide anything
+   with CSS — feed.js fetches basel.html / elsewhere.html / notes.html and
+   builds both pages directly, capping the homepage in JS. See feed.js. */
 
 .post-title {
   font-family: var(--serif);
@@ -242,6 +235,35 @@ article.post:last-child {
 }
 .read-more {
   font-size: 0.88em;
+}
+
+/* Category-page entries (basel.html / elsewhere.html / notes.html) — one
+   block per post, with a short excerpt. This is the ONLY place you add a
+   new post: feed.js reads these same blocks to build the homepage and
+   archive.html automatically. See the HOW TO ADD A NEW POST comment in
+   each category page. */
+.entry {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.entry:last-child { border-bottom: none; }
+.entry-title {
+  font-family: var(--serif);
+  font-size: 1.25em;
+  font-weight: normal;
+  margin: 0 0 4px;
+}
+.entry-title a { color: var(--text); }
+.entry-title a:hover { color: var(--link); }
+.entry-meta {
+  color: var(--muted);
+  font-size: 0.82em;
+  margin: 0 0 8px;
+}
+.entry-excerpt {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
 }
 
 /* ---------- Single post nav ---------- */

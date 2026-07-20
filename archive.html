@@ -32,10 +32,11 @@
         <p>Everything in one place, newest first. Looking for just one kind
         of post? See <a href="basel.html">Basel</a>,
         <a href="elsewhere.html">Elsewhere</a>, or <a href="notes.html">Notes</a>.</p>
-        <!-- Add one line per post, newest first -->
-        <p><time datetime="2026-07-15">Jul 15, 2026</time> — <a href="posts/template.html">[Example] A café review title goes here</a> <span class="post-tags">(Basel)</span></p>
-        <p><time datetime="2026-07-10">Jul 10, 2026</time> — <a href="posts/template-note.html">[Example] A general coffee post title goes here</a> <span class="post-tags">(Coffee Notes)</span></p>
-        <p><time datetime="2026-07-01">Jul 1, 2026</time> — <a href="posts/template.html">[Example] City — a café review title goes here</a> <span class="post-tags">(Elsewhere)</span></p>
+        <!-- This list builds itself from basel.html, elsewhere.html, and
+             notes.html via feed.js — nothing to edit here, ever. -->
+        <div id="archive-list">
+          <p>Loading&hellip;</p>
+        </div>
       </div>
     </article>
   </main>
@@ -48,5 +49,9 @@
   </footer>
 
 </div>
+<script src="feed.js"></script>
+<script>
+  fetchEntries().then(renderArchive);
+</script>
 </body>
 </html>

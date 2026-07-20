@@ -31,10 +31,24 @@
       <div class="post-body">
         <p>Café visits from everywhere that isn't Basel — other cities,
         other trips. Newest first.</p>
-        <!-- Add one line per non-Basel review here, newest first.
-             Consider prefixing the city, e.g. "Zurich — [title]" -->
-        <p><time datetime="2026-07-01">Jul 1, 2026</time> — <a href="posts/template.html">[Example] City — a café review title goes here</a></p>
       </div>
+    </article>
+
+    <!--
+      HOW TO ADD A NEW ELSEWHERE REVIEW:
+      1. Copy posts/template.html, save it as posts/your-slug.html, and
+         fill it in (use the "in Elsewhere" category line, not Basel).
+      2. Copy one <article class="entry"> block below and paste it at the
+         TOP (newest first). Consider prefixing the title with the city,
+         e.g. "Zurich — [title]".
+      That's it — this shows up here, on the homepage, and on the
+      archive automatically (see feed.js). Nothing else to touch.
+    -->
+
+    <article class="entry" data-date="2026-07-01">
+      <h3 class="entry-title"><a href="posts/template.html">[Example] City — a café review title goes here</a></h3>
+      <p class="entry-meta"><time datetime="2026-07-01">July 1, 2026</time></p>
+      <p class="entry-excerpt">Same placeholder pattern as Basel, just for a café outside it — replace with your own excerpt once you've written the real post.</p>
     </article>
   </main>
 

@@ -29,14 +29,27 @@
     <article class="post">
       <h2 class="post-title" style="font-size:1.3em;">Basel</h2>
       <div class="post-body">
-        <!-- This is the flagship project page — update the count below by
-             hand as you go. If you ever want a running list of unvisited
-             places too, add a second short list under this paragraph. -->
-        <p>The goal: every coffee shop in Basel. <strong>1</strong> reviewed
+        <p>The goal: every coffee shop in Basel. <strong id="basel-count">0</strong> reviewed
         so far.</p>
-        <!-- Add one line per Basel review here, newest first -->
-        <p><time datetime="2026-07-15">Jul 15, 2026</time> — <a href="posts/template.html">[Example] A café review title goes here</a></p>
       </div>
+    </article>
+
+    <!--
+      HOW TO ADD A NEW BASEL REVIEW:
+      1. Copy posts/template.html, save it as posts/your-slug.html, and
+         fill it in (keep the "in Basel" category line in its post-meta).
+      2. Copy one <article class="entry"> block below and paste it at the
+         TOP (newest first). Fill in data-date, the link + title, the
+         date shown, and a 1-2 sentence summary.
+      That's it — this shows up here, on the homepage, and on the
+      archive automatically (see feed.js). The count above updates itself
+      too. Nothing else to touch.
+    -->
+
+    <article class="entry" data-date="2026-07-15">
+      <h3 class="entry-title"><a href="posts/template.html">[Example] A café review title goes here</a></h3>
+      <p class="entry-meta"><time datetime="2026-07-15">July 15, 2026</time></p>
+      <p class="entry-excerpt">A couple of sentences about the vibe, the coffee, and whether you'd go back — replace with your own excerpt once you've written the real post.</p>
     </article>
   </main>
 
@@ -48,5 +61,9 @@
   </footer>
 
 </div>
+<script>
+  document.getElementById("basel-count").textContent =
+    document.querySelectorAll(".entry").length;
+</script>
 </body>
 </html>

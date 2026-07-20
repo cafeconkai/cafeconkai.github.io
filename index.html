@@ -26,62 +26,17 @@
     </nav>
   </header>
 
-  <main id="home-feed">
-
+  <main>
     <!--
-      HOW TO ADD A NEW POST:
-      1. Café review (Basel or elsewhere) -> copy posts/template.html
-         General coffee post -> copy posts/template-note.html
-         Save as posts/your-post-slug.html and fill it in.
-      2. Copy one <article class="post"> block below and paste it at the
-         TOP of this list (newest first), update the title link, date,
-         category/tags, and excerpt text.
-      3. Add the same entry to archive.html, and to basel.html,
-         elsewhere.html, or notes.html depending on which type it is.
-
-      This page only ever SHOWS the 10 most recent excerpts (see the
-      #home-feed rule in style.css) — older ones stay right here in the
-      file, just hidden, so nothing needs to be deleted. Full history is
-      always on archive.html and the category pages regardless.
-      See README.md for the full walkthrough.
+      This page builds itself — feed.js fetches basel.html, elsewhere.html,
+      and notes.html and renders the 10 most recent entries below. To add
+      a new post, you never edit this file: write the post, then add one
+      .entry block to whichever category page it belongs to. See
+      README.md for the full walkthrough.
     -->
-
-    <!-- Example: a Basel café review -->
-    <article class="post">
-      <h2 class="post-title"><a href="posts/template.html">[Example] A café review title goes here</a></h2>
-      <p class="post-meta">Posted on <time datetime="2026-07-15">July 15, 2026</time> in <a href="basel.html">Basel</a></p>
-      <div class="post-excerpt">
-        <p>This is a placeholder excerpt. Replace this whole &lt;article&gt; block with your
-        first real review — a couple of sentences about the shop, then a
-        “Continue reading” link to the full post page.</p>
-      </div>
-      <p class="read-more"><a href="posts/template.html">Continue reading &rarr;</a></p>
-    </article>
-
-    <!-- Example: an Elsewhere café review -->
-    <article class="post">
-      <h2 class="post-title"><a href="posts/template.html">[Example] City — a café review title goes here</a></h2>
-      <p class="post-meta">Posted on <time datetime="2026-07-01">July 1, 2026</time> in <a href="elsewhere.html">Elsewhere</a></p>
-      <div class="post-excerpt">
-        <p>Same placeholder pattern as above, just for a café outside Basel —
-        replace with your own excerpt and link once you've written the
-        real post.</p>
-      </div>
-      <p class="read-more"><a href="posts/template.html">Continue reading &rarr;</a></p>
-    </article>
-
-    <!-- Example: a general coffee post -->
-    <article class="post">
-      <h2 class="post-title"><a href="posts/template-note.html">[Example] A general coffee post title goes here</a></h2>
-      <p class="post-meta">Posted on <time datetime="2026-07-10">July 10, 2026</time> in <a href="notes.html">Coffee Notes</a></p>
-      <div class="post-excerpt">
-        <p>This is a placeholder excerpt for a non-review post, like brewing
-        tips or an explainer on specialty coffee. Trim to a couple of
-        sentences, then link to the full post.</p>
-      </div>
-      <p class="read-more"><a href="posts/template-note.html">Continue reading &rarr;</a></p>
-    </article>
-
+    <div id="home-feed">
+      <p>Loading posts&hellip;</p>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -102,5 +57,9 @@
   </footer>
 
 </div>
+<script src="feed.js"></script>
+<script>
+  fetchEntries().then((entries) => renderHomeFeed(entries, 10));
+</script>
 </body>
 </html>
